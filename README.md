@@ -48,4 +48,4 @@ We intend to use Github Discussions, Gitter and other tools, but please just use
 Work on `scsdk` started at Standard Cyborg in 2018 and has been under active development since then. We welcome contributions though we don't have a contribution guide yet.
 
 ## License
-[Apache License 2.0]()
+[Apache License 2.0](LICENSE)
