@@ -1,0 +1,101 @@
+// Copyright 2020 Standard Cyborg
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+//     http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+syntax = "proto3";
+
+package standard_cyborg.proto.math;
+
+// NumericType represents the numeric type contained in Tensor.
+enum NumericType {
+  NUMERIC_TYPE_UNKNOWN = 0;
+
+  // The following fields indicate data is stored in a `repeated` field of the 
+  // corresponding type
+  NUMERIC_TYPE_UINT8 = 2;
+  NUMERIC_TYPE_UINT32 = 3;
+  NUMERIC_TYPE_UINT64 = 4;
+  NUMERIC_TYPE_INT32 = 5;
+  NUMERIC_TYPE_INT64 = 6;
+  NUMERIC_TYPE_FLOAT = 7;
+  NUMERIC_TYPE_DOUBLE = 8;
+
+  // The following fields indicate data is stored in a `bytes` field of the 
+  // corresponding type.
+  NUMERIC_TYPE_UINT8_BYTES = 20;
+  NUMERIC_TYPE_UINT32_LITTLE_ENDIAN_BYTES = 21;
+  NUMERIC_TYPE_UINT64_LITTLE_ENDIAN_BYTES = 22;
+  NUMERIC_TYPE_INT32_LITTLE_ENDIAN_BYTES = 23;
+  NUMERIC_TYPE_INT64_LITTLE_ENDIAN_BYTES = 24;
+  NUMERIC_TYPE_FLOAT_IEEE754_LITTLE_ENDIAN_BYTES = 25;
+  NUMERIC_TYPE_DOUBLE_IEEE754_LITTLE_ENDIAN_BYTES = 26;
+
+  NUMERIC_TYPE_JPEG_BYTES = 30;
+  NUMERIC_TYPE_PNG_BYTES = 31;
+}
+
+// Dimension represents metadata about a single dimension.
+message Dimension {
+  // The number of elements along this dimension or axis
+  uint64 size = 1;
+  // Optional: a name for this dimension; e.g. the 'height' of an image, or
+  // the the 'N' number of points in matrix representing a point cloud.
+  string name = 2;
+  // Optional: for a dimension that represents a collection of datum fields, 
+  // the names of these fields.  Examples:
+  // * `['x', 'y', 'z']` for a dimension representing the spatial location of a 
+  //       single point in a cloud
+  // * `['r', 'g', 'b']` for the channels dimension of an image in 
+  //       HWC Tensor format
+  // * `['x', 'y', 'z', 'r', 'g', 'b']` for a point in a colored point cloud
+  repeated string field_names = 3;
+}
+
+// TensorProperties contains non-numerical metadata describing a Tensor.
+message TensorProperties {
+  NumericType numeric_type = 1;
+  repeated Dimension shape = 3;
+}
+
+// Tensor is a multidimensional packed array of numerical values.
+message Tensor {
+  TensorProperties properties = 1;
+  // Data is packed in row-major / C-order format.
+  // repeated bytes uint8_values = 2;  DEPRECATED! Use `uint8_bytes` below
+  repeated uint32 uint32_values = 3;
+  repeated uint64 uint64_values = 4;
+  repeated int32 int32_values = 5;
+  repeated int64 int64_values = 6;
+  repeated float float_values = 7;
+  repeated double double_values = 8;
+  // Repeated fields may be very slow and some deserialization implementations 
+  // may not preserve exact values (for example, in the protoc-generated 
+  // JavaScript code), so raw data representing the values may alternatively be 
+  // stored in tensor_bytes and indicated as such with the corresponding 
+  // NumericType enum. It is advisable to avoid these encoding unless low 
+  // latency or other considerations require otherwise.
+  //
+  // NB: All multi-byte formats are to be stored in little-endian format, and 
+  // floating point values are to be stored in IEEE-754 floating point format.
+  bytes uint8_bytes = 20;
+  bytes uint32_little_endian_bytes = 21;
+  bytes uint64_little_endian_bytes = 22;
+  bytes int32_little_endian_bytes = 23;
+  bytes int64_little_endian_bytes = 24;
+  bytes float_ieee754_little_endian_bytes = 25;
+  bytes double_ieee754_little_endian_bytes = 26;
+  
+  // For images
+  bytes jpeg_bytes = 30;
+  bytes png_bytes = 31;
+}

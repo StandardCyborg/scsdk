@@ -1,0 +1,4 @@
+.eggs
+dist
+*.egg-info
+.ipynb_checkpoints

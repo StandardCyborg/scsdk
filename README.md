@@ -1,3 +1,5 @@
+# scsdk
+
 ### **Open-source cross-platform data structures, serialization, and algorithms for expressing, storing, and processing spatial data.**
 
 SCSDK is a cross-platform package that provides fast, flexible, and expressive data structures designed to make working with spatial data both easy and intuitive. It aims to be the fundamental high-level building block for solving computer vision and perception problems. SCSDK also provides non-library dependent data structures through our protobuf definitions. Lastly SCSDK aims to have a robust catalog of core processing algorithms for spatial data.

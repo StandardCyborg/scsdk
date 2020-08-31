@@ -1,0 +1,2 @@
+fixtures/* filter=lfs diff=lfs merge=lfs -text
+fixtures/**/* filter=lfs diff=lfs merge=lfs -text

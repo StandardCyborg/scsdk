@@ -1,0 +1,4 @@
+numpy==1.19.1
+Pillow==7.2.0
+PyWavefront==1.3.2
+scsdk==2.2.0

@@ -1,0 +1,80 @@
+// Copyright 2020 Standard Cyborg
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+//     http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+syntax = "proto3";
+
+import "standard_cyborg/proto/math/core.proto";
+import "standard_cyborg/proto/math/transform.proto";
+
+
+package standard_cyborg.proto.sc3d;
+
+// TODO(ricky) sync with twist thread
+// A pinhole camera model
+message PinholeCamera {
+  
+  // The name of the frame of this camera
+  string frame = 1;
+
+
+  /// Intrinsics
+
+  // These camera intrinsics parameters may be used to compute the camera 
+  // intrinsic matrix. The matrix may be constructed thusly 
+  // (where c_* = principal_point, f_* = focal_length, and s = sensor_skew):
+  //
+  // intrinsics = [ f_x, s,   c_x,
+  //                0,   f_y, c_y,
+  //                0,   0,   1    ]
+  math.Vec2 focal_length = 10;
+  math.Vec2 principal_point = 11;
+  float sensor_skew = 12;
+
+  // The dimensions of the source image (typically full camera resolution);
+  // use this with the intrinsic matrix K
+  int64 image_height = 13;
+  int64 image_width = 14;
+
+
+  /// Optional: Other Context
+
+  // The sensor transform reflects the orientation of the device sensor 
+  // relative to the default unprojection which points down the z-axis. When 
+  // unprojecting, this transforms the points after the intrinsic matrix and 
+  // before the extrinsic matrix.  Sometimes, this is simply the identity
+  // transform.
+  math.Transform sensor_transform = 20;
+  
+  // The size of a physical pixel in millimeters.
+  double pixel_pitch_width_mm = 30;
+  double pixel_pitch_height_mm = 31;
+
+  // radial_distortion_coefficients and tangential_distortion_coefficients
+  // represent the coefficients in a series approximating the lens distortion
+  // function for this camera.
+  //
+  // r = radial distance to the image principal point / optical center
+  // radial_distortion = 
+  //    1 + radial[0] * r^2 + radial[1] * r^4 + radial[2] * r^6 + ...
+  // x_corrected = x_input * radial_distortion
+  // y_corrected = y_input * radial_distortion
+  //
+  // In the above equations, x and y are computed relative to the principal
+  // point as the origin and r = 1 at the corner farthest from the principal
+  // point. I.e. (x, y) at the principal point will be (0, 0).
+  //
+  // The distortion model used is the Brown-Conrady model with zero tangential
+  // distortion. FMI: https://en.wikipedia.org/wiki/Distortion_(optics) 
+  repeated float radial_distortion_coefficients = 32;
+
+}
