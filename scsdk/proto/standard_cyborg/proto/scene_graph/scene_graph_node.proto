@@ -23,6 +23,7 @@ import "standard_cyborg/proto/sc3d/plane.proto";
 import "standard_cyborg/proto/sc3d/landmark.proto";
 
 import "standard_cyborg/proto/math/core.proto";
+import "standard_cyborg/proto/math/transform.proto";
 
 package standard_cyborg.proto.scene_graph;
 
@@ -34,6 +35,9 @@ message SceneGraphNode {
   int32 materialModel = 4;
 
   repeated int32 children = 6;  
+
+  math.Transform transform = 5;
+
 
   oneof contents {
     sc3d.Polyline polyline = 20;

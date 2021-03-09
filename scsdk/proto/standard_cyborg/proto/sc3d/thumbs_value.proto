@@ -14,18 +14,9 @@
 
 syntax = "proto3";
 
-import "standard_cyborg/proto/math/core.proto";
+package standard_cyborg.proto.sc3d;
 
-package standard_cyborg.proto.math;
-
-// Transform represents a three-dimensional transform made up of a rotation
-// followed by a translation.
-message Transform {
-  Quaternion rotation = 1;
-  Vec3 translation = 2;
-  Vec3 scale = 5;
-  Vec3 shear = 6;
-  
-  string src_frame = 3;
-  string dest_frame = 4;
+// Specifies an either thumbs up for thumbs down value.
+message ThumbsValue {
+  bool value = 1;
 }

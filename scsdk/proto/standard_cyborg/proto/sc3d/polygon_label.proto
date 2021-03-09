@@ -11,21 +11,18 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 syntax = "proto3";
 
 import "standard_cyborg/proto/math/core.proto";
 
-package standard_cyborg.proto.math;
+package standard_cyborg.proto.sc3d;
 
-// Transform represents a three-dimensional transform made up of a rotation
-// followed by a translation.
-message Transform {
-  Quaternion rotation = 1;
-  Vec3 translation = 2;
-  Vec3 scale = 5;
-  Vec3 shear = 6;
+message PolygonLabel {
+
+  message SubPolygon {
+    repeated math.Vec2 positions = 1;
+  }
+
+  repeated SubPolygon subPolygons = 2;
   
-  string src_frame = 3;
-  string dest_frame = 4;
 }
